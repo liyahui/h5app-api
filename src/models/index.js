@@ -1,0 +1,19 @@
+import fs from 'fs'
+import path from 'path'
+import config from '../config/mysql'
+import Sequelize from 'sequelize'
+
+const sequelize = new Sequelize(config.database, config.username, config.password, config)
+const db = {}
+
+fs.readdirSync(__dirname).filter(file => {
+	return !file.startsWith('.') && !file.startsWith('index')
+}).forEach(file => {
+	let model = sequelize.import(path.join(__dirname, file))
+	db[model.name] = model
+})
+
+db.sequelize = sequelize
+db.Sequelize = Sequelize
+
+export default db

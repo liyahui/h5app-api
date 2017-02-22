@@ -1,12 +1,9 @@
 import express from 'express'
+import routes from './config/routes'
 
 const app = express()
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+routes(app)
 
-const server = app.listen(8888, (...args) => {
-  let { address, port } = server.address()
-  console.log('http://%s:%s', address, port)
-})
+app.listen(8888)
+
