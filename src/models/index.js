@@ -3,7 +3,7 @@ import path from 'path'
 import config from '../config/mysql'
 import Sequelize from 'sequelize'
 
-const sequelize = new Sequelize(config.database, config.username, config.password, config)
+const sequelize = new Sequelize(config)
 const db = {}
 
 fs.readdirSync(__dirname).filter(file => {
