@@ -1,5 +1,5 @@
 import * as user from '../controllers/user'
-import * as resource from '../controllers/resource'
+import * as image from '../controllers/image'
 
 export default app => {
   app.all('*', (req, res, next) => {
@@ -12,5 +12,6 @@ export default app => {
   app.get('/user', user.index)
   app.get('/user/login', user.login)
 
-  app.post('/resource/put', resource.put)
+  app.get('/image', image.select)
+  app.post('/image', image.create)
 }

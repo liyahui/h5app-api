@@ -3,11 +3,7 @@ import jwt from 'jsonwebtoken'
 import md5 from 'md5'
 
 export const index = (req, res) => {
-  models.sequelize.sync({
-    // force: true
-  }).then(() => {
-    return models.User.findOne()
-  }).then(result => {
+  models.User.findOne().then(result => {
     res.json(result)
   })
 }

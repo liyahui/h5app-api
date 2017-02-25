@@ -13,6 +13,8 @@ fs.readdirSync(__dirname).filter(file => {
 	db[model.name] = model
 })
 
+sequelize.sync()
+
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 
