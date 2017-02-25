@@ -10,7 +10,7 @@ const upload = pify(multer({
     fileSize: MAX_FIZE_SIZE
   },
   fileFilter(req, file, cb) {
-    const allow = IMAGE_MIME_TYPE.includes(file.mimetype)
+    const allow = IMAGE_MIME_TYPE.test(file.mimetype)
     cb(null, allow)
   }
 }).single('file'))
@@ -26,11 +26,11 @@ export const create = (req, res) => {
       width: result.info.width,
       height: result.info.height
     })
-  }).then(data => {
+  }).then(image => {
     res.json({
       code: SUCCESS_CODE,
       message: '上传成功',
-      data
+      image
     })
   }).catch(error => {
     res.json({
@@ -40,19 +40,21 @@ export const create = (req, res) => {
   })
 }
 
-export const select = (req, res) => {
-  models.Image.findAll().then(list => {
-    res.json({
-      code: SUCCESS_CODE,
-      message: '获取成功',
-      data: {
-        list
-      }
-    })
-  }).catch(error => {
-    res.json({
-      code: ERROR_CODE,
-      message: '获取失败'
-    })
+export const select = async (req, res) => {
+  const offset = Number(req.query.offset || 0)
+  const limit = Number(req.query.limit || 10)
+
+  const total = await models.Image.count()
+  const list = await models.Image.findAll({
+    order: [['id', 'DESC']],
+    offset,
+    limit
+  })
+
+  res.json({
+    code: SUCCESS_CODE,
+    message: '获取成功',
+    list,
+    total
   })
 }

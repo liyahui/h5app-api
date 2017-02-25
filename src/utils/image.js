@@ -4,7 +4,7 @@ import config from '../config/qiniu'
 
 export const MAX_FIZE_SIZE = 500 * 1024
 
-export const IMAGE_MIME_TYPE = ['image/jpg', 'image/png', 'image/gif']
+export const IMAGE_MIME_TYPE = /(png|gif|jpe?g)$/
 
 export const UPLOAD_MESSAGE = {
   LIMIT_FILE_SIZE: `图片大小不能超过${MAX_FIZE_SIZE / 1024}k`
