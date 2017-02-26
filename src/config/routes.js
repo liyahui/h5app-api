@@ -14,4 +14,5 @@ export default app => {
 
   app.get('/image', image.select)
   app.post('/image', image.create)
+  app.delete('/image/:id', image.remove)
 }

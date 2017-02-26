@@ -64,3 +64,12 @@ export const select = async (req, res) => {
     total
   })
 }
+
+export const remove = async (req, res) => {
+  await models.Image.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  res.json(req.params)
+}
