@@ -11,32 +11,38 @@ const upload = pify(multer({
   },
   fileFilter(req, file, cb) {
     const allow = IMAGE_MIME_TYPE.test(file.mimetype)
-    cb(null, allow)
+    if (allow) {
+      cb(null, allow)
+    } else {
+      const error = new Error('不允许的图片类型')
+      error.code = 'LIMIT_FILE_MIMETYPE'
+      cb(error)
+    }
   }
 }).single('file'))
 
-export const create = (req, res) => {
-  upload(req, res).then(() => {
-    return qiniu.upload(req.file.buffer)
-  }).then(result => {
-    return imageInfo(result)
-  }).then(result => {
-    return models.Image.create({
-      key: result.key,
-      width: result.info.width,
-      height: result.info.height
-    })
-  }).then(image => {
-    res.json({
-      code: SUCCESS_CODE,
-      message: '上传成功',
-      image
-    })
-  }).catch(error => {
-    res.json({
+export const create = async (req, res) => {
+  try {
+    await upload(req, res)
+  } catch(e) {
+    return res.json({
       code: ERROR_CODE,
-      message: '上传失败'
+      message: UPLOAD_MESSAGE[e.code]
     })
+  }
+
+  const result = await qiniu.upload(req.file.buffer)
+  const info = await imageInfo(result.url)
+  const image = await models.Image.create({
+    key: result.key,
+    width: info.width,
+    height: info.height
+  })
+
+  res.json({
+    code: SUCCESS_CODE,
+    message: '上传成功',
+    image
   })
 }
 

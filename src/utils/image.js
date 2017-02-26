@@ -7,12 +7,13 @@ export const MAX_FIZE_SIZE = 500 * 1024
 export const IMAGE_MIME_TYPE = /(png|gif|jpe?g)$/
 
 export const UPLOAD_MESSAGE = {
-  LIMIT_FILE_SIZE: `图片大小不能超过${MAX_FIZE_SIZE / 1024}k`
+  LIMIT_FILE_SIZE: `图片大小不能超过${MAX_FIZE_SIZE / 1024}k`,
+  LIMIT_FILE_MIMETYPE: `只能上传图片文件`
 }
 
-export const imageInfo = image => {
+export const imageInfo = url => {
   return new Promise((resolve, reject) => {
-    http.get(`${image.url}?imageInfo`, res => {
+    http.get(`${url}?imageInfo`, res => {
       let result = ''
 
       res.on('data', chunk => {
@@ -20,8 +21,7 @@ export const imageInfo = image => {
       })
 
       res.on('end', () => {
-        image.info = JSON.parse(result)
-        resolve(image)
+        resolve(JSON.parse(result))
       })
     }).on('error', e => {
       reject(e)
