@@ -21,6 +21,9 @@ const upload = pify(multer({
   }
 }).single('file'))
 
+/**
+ * 上传图片
+ */
 export const create = async (req, res) => {
   try {
     await upload(req, res)
@@ -46,6 +49,9 @@ export const create = async (req, res) => {
   })
 }
 
+/**
+ * 图片列表
+ */
 export const select = async (req, res) => {
   const offset = Number(req.query.offset || 0)
   const limit = Number(req.query.limit || 10)
@@ -65,6 +71,9 @@ export const select = async (req, res) => {
   })
 }
 
+/**
+ * 删除图片
+ */
 export const remove = async (req, res) => {
   await models.Image.destroy({
     where: {
