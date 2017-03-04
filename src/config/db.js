@@ -6,6 +6,7 @@ export default {
   database: 'h5app',
   host: 'liyahui.cn',
   dialect: 'mysql',
+
   define: {
     underscored: true,
     underscoredAll: true,
@@ -21,5 +22,9 @@ export default {
         return moment(date).format('YYYY-MM-DD HH:mm:ss')
       }
     }
+  },
+  
+  logging() {
+
   }
 }

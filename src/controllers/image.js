@@ -22,6 +22,22 @@ const upload = pify(multer({
 }).single('file'))
 
 /**
+ * 是否是自己的图片
+ */
+export const isOwn = async(req, res, next) => {
+  const image = await models.Image.findById(req.params.id)
+
+  if (image && image.uid === req.uid) {
+    next()
+  } else {
+    res.json({
+      code: ERROR_CODE,
+      message: '非法操作'
+    })
+  }
+}
+
+/**
  * 上传图片
  */
 export const create = async (req, res) => {
@@ -36,7 +52,8 @@ export const create = async (req, res) => {
 
   const result = await qiniu.upload(req.file.buffer)
   const info = await imageInfo(result.url)
-  const image = await models.Image.create({
+  const item = await models.Image.create({
+    uid: req.uid,
     key: result.key,
     width: info.width,
     height: info.height
@@ -45,20 +62,22 @@ export const create = async (req, res) => {
   res.json({
     code: SUCCESS_CODE,
     message: '上传成功',
-    image
+    item
   })
 }
 
 /**
  * 图片列表
  */
-export const select = async (req, res) => {
+export const list = async (req, res) => {
   const offset = Number(req.query.offset || 0)
   const limit = Number(req.query.limit || 10)
+  const where = { uid: req.uid }
 
-  const total = await models.Image.count()
+  const total = await models.Image.count(where)
   const list = await models.Image.findAll({
     order: [['id', 'DESC']],
+    where,
     offset,
     limit
   })
@@ -75,10 +94,21 @@ export const select = async (req, res) => {
  * 删除图片
  */
 export const remove = async (req, res) => {
-  await models.Image.destroy({
+  const result = await models.Image.destroy({
     where: {
       id: req.params.id
     }
   })
-  res.json(req.params)
+  
+  if (result) {
+    res.json({
+      code: SUCCESS_CODE,
+      message: '删除成功'
+    })
+  } else {
+    res.json({
+      code: ERROR_CODE,
+      message: '删除失败'
+    })
+  }
 }

@@ -7,6 +7,9 @@ export default (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
+    uid: {
+      type: DataTypes.INTEGER,
+    },
     key: {
       type: DataTypes.STRING(28)
     },
