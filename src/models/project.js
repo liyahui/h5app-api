@@ -30,11 +30,21 @@ export default (sequelize, DataTypes) => {
         this.setDataValue('cover', val)
       }
     },
+    extends: {
+      type: DataTypes.STRING,
+      get() {
+        const val = this.getDataValue('extends')
+        return val ? JSON.parse(val) : {}
+      },
+      set(val) {
+        this.setDataValue('extends', JSON.stringify(val))
+      }
+    },
     pages: {
       type: DataTypes.TEXT,
       get() {
-        const pages = this.getDataValue('pages')
-        return pages ? JSON.parse(pages) : []
+        const val = this.getDataValue('pages')
+        return val ? JSON.parse(val) : []
       },
       set(val) {
         this.setDataValue('pages', JSON.stringify(val))

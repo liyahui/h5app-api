@@ -1,0 +1,16 @@
+{
+  "title": null,
+  "desc": null,
+  "icon": null,
+  "pages": [
+    {
+      "id": 1,
+      "name": "页面1",
+      "background": {
+        "color": "#fafafa",
+        "image": ""
+      },
+      "widgets": []
+    }
+  ]
+}

@@ -85,7 +85,9 @@ export const item = async(req, res) => {
  */
 export const create = async(req, res) => {
   const fileds = {
-    uid: req.uid
+    uid: req.uid,
+    pages: req.body.pages,
+    extends: req.body.extends
   }
 
   if (req.body.id) {
@@ -95,6 +97,7 @@ export const create = async(req, res) => {
     fileds.icon = copy.icon
     fileds.cover = copy.cover
     fileds.pages = copy.pages
+    fileds.extends = copy.extends
   }
 
   const project = await models.Project.create(fileds)
@@ -128,7 +131,8 @@ export const update = async(req, res) => {
     desc,
     icon,
     cover,
-    pages
+    pages,
+    extends: req.body.extends
   }, {
     where: {
       id: req.params.id
@@ -147,7 +151,8 @@ export const update = async(req, res) => {
     title,
     desc,
     icon,
-    pages: optimizePages
+    pages: optimizePages,
+    extends: req.body.extends
   }
 
   fs.writeFileSync(`${DATA_SAVE_PATH}/${req.params.id}.json`, JSON.stringify(data, null, 2))
