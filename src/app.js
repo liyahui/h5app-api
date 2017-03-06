@@ -5,6 +5,11 @@ import bodyParser from 'body-parser'
 
 const app = express()
 
+app.use((err, req, res, next) => {
+	console.log(err)
+	next()
+})
+
 app.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS')
@@ -12,9 +17,14 @@ app.all('*', (req, res, next) => {
   next()
 })
 
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '1mb'}))
 app.use(express.static(path.join(__dirname, '../public')))
 
 routes(app)
+
+app.use((err, req, res, next) => {
+	console.log(err)
+	next()
+})
 
 app.listen(8888)
