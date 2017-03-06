@@ -104,6 +104,14 @@ export const create = async(req, res) => {
   const project = await models.Project.create(fileds)
 
   if (project) {
+    const file = `${DATA_PATH}/${req.body.id}.json`
+    const exists = fs.existsSync(file)
+
+    if (exists) {
+      const json = fs.readFileSync(file)
+      fs.writeFileSync(`${DATA_PATH}/${project.id}.json`, json)         
+    }
+
     res.json({
       code: SUCCESS_CODE,
       message: '创建成功',
@@ -138,7 +146,7 @@ export const update = async(req, res) => {
       desc,
       icon,
       pages: optimizePages,
-      extends: req.body.extends
+      extends: req.project.extends
     }
 
     fs.writeFileSync(`${DATA_PATH}/${req.params.id}.json`, JSON.stringify(data))
@@ -192,6 +200,13 @@ export const remove = async(req, res) => {
   })
 
   if (result) {
+    const file = `${DATA_PATH}/${req.params.id}.json`
+    const exists = fs.existsSync(file)
+
+    if (exists) {
+      fs.unlinkSync(file)
+    }
+
     res.json({
       code: SUCCESS_CODE,
       message: '删除成功'

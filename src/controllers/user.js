@@ -10,6 +10,14 @@ import { MESSAGE, acessToken } from '../utils/user'
 export const auth = (req, res, next) => {
   if (req.method === 'OPTIONS') return next()
 
+  if (req.path.startsWith('/data')) {
+    res.json({
+      code: ERROR_CODE,
+      message: '还未创建或保存'
+    })
+    return next()
+  }
+
   const token = req.headers.authorization
 
   if (token) {
