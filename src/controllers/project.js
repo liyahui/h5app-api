@@ -88,7 +88,7 @@ export const create = async(req, res) => {
   const fileds = {
     uid: req.uid,
     pages: req.body.pages,
-    extends: req.body.extends
+    props: req.body.props
   }
 
   if (req.body.id) {
@@ -98,7 +98,7 @@ export const create = async(req, res) => {
     fileds.icon = copy.icon
     fileds.cover = copy.cover
     fileds.pages = copy.pages
-    fileds.extends = copy.extends
+    fileds.props = copy.props
   }
 
   const project = await models.Project.create(fileds)
@@ -109,7 +109,7 @@ export const create = async(req, res) => {
 
     if (exists) {
       const json = fs.readFileSync(file)
-      fs.writeFileSync(`${DATA_PATH}/${project.id}.json`, json)         
+      fs.writeFileSync(`${DATA_PATH}/${project.id}.json`, json)
     }
 
     res.json({
@@ -129,63 +129,53 @@ export const create = async(req, res) => {
  * 更新项目
  */
 export const update = async(req, res) => {
-  const preview = req.body.preview
+  const { title, desc, icon, pages, props } = req.body
+  const image = req.body.cover.replace(/^data:image\/\w+;base64,/, '')
+  const result = await qiniu.upload(new Buffer(image, 'base64'))
+  const cover = result.key
 
-  if (preview) {
-    const { title, desc, icon, pages } = req.project
-    const optimizePages = pages.map(page => {
-      page.widgets = page.widgets.map(widget => {
-        delete widget.state
-        return widget
-      })
-      return page
-    })
-
-    const data = {
-      title,
-      desc,
-      icon,
-      pages: optimizePages,
-      extends: req.project.extends
+  const success = await models.Project.update({
+    title,
+    desc,
+    icon,
+    cover,
+    pages,
+    props
+  }, {
+    where: {
+      id: req.params.id
     }
+  })
 
-    fs.writeFileSync(`${DATA_PATH}/${req.params.id}.json`, JSON.stringify(data))
+  const optimizePages = pages.map(page => {
+    page.widgets = page.widgets.map(widget => {
+      delete widget.state
+      return widget
+    })
+    return page
+  })
 
+  const data = {
+    title,
+    desc,
+    icon,
+    pages: optimizePages,
+    props
+  }
+
+  fs.writeFileSync(`${DATA_PATH}/${req.params.id}.json`, JSON.stringify(data))
+
+  if (success) {
     res.json({
       code: SUCCESS_CODE,
-      message: '保存成功'
+      message: '保存成功',
+      cover: result.url
     })
   } else {
-    const { title, desc, icon, pages } = req.body
-    const image = req.body.cover.replace(/^data:image\/\w+;base64,/, '')
-    const result = await qiniu.upload(new Buffer(image, 'base64'))
-    const cover = result.key
-
-    const success = await models.Project.update({
-      title,
-      desc,
-      icon,
-      cover,
-      pages,
-      extends: req.body.extends
-    }, {
-      where: {
-        id: req.params.id
-      }
+    res.json({
+      code: ERROR_CODE,
+      message: '保存失败'
     })
-
-    if (success) {
-      res.json({
-        code: SUCCESS_CODE,
-        message: '保存成功',
-        cover: result.url
-      })
-    } else {
-      res.json({
-        code: ERROR_CODE,
-        message: '保存失败'
-      })
-    }
   }
 }
 

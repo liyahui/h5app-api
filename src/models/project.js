@@ -30,14 +30,14 @@ export default (sequelize, DataTypes) => {
         this.setDataValue('cover', val)
       }
     },
-    extends: {
+    props: {
       type: DataTypes.STRING,
       get() {
-        const val = this.getDataValue('extends')
+        const val = this.getDataValue('props')
         return val ? JSON.parse(val) : {}
       },
       set(val) {
-        this.setDataValue('extends', JSON.stringify(val))
+        this.setDataValue('props', JSON.stringify(val))
       }
     },
     pages: {
