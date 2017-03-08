@@ -108,12 +108,12 @@ export const create = async(req, res) => {
 export const list = async(req, res) => {
   const offset = Number(req.query.offset || 0)
   const limit = Number(req.query.limit || 10)
-  const where = { 
+  const where = {
     uid: req.uid,
     type: resourceMap[req.params.type].type
   }
 
-  const total = await models.Resource.count(where)
+  const total = await models.Resource.count({ where })
   const list = await models.Resource.findAll({
     order: [
       ['id', 'DESC']
