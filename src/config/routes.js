@@ -1,5 +1,4 @@
 import * as user from '../controllers/user'
-import * as image from '../controllers/image'
 import * as resource from '../controllers/resource'
 import * as project from '../controllers/project'
 
@@ -15,10 +14,6 @@ export default app => {
   app.post('/projects', project.create)
   app.put('/projects/:id', project.isOwn, project.update)
   app.delete('/projects/:id', project.isOwn, project.remove)
-
-  app.get('/image', image.list)
-  app.post('/image', image.create)
-  app.delete('/image/:id', image.isOwn, image.remove)
 
   app.get('/resources/:type', resource.list)
   app.post('/resources/:type', resource.create)

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import models from '../models'
 import { SUCCESS_CODE, ERROR_CODE, DATA_PATH } from '../utils'
-import { qiniu } from '../utils/image'
+import { qiniu } from '../utils/resource'
 
 /**
  * 是否是自己的项目
