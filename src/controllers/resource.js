@@ -87,7 +87,7 @@ export const create = async(req, res) => {
     props.height = info.height
   }
 
-  const item = await models.Resource.create({
+  const resource = await models.Resource.create({
     uid: req.uid,
     type: current.type,
     name: req.file.originalname,
@@ -98,7 +98,7 @@ export const create = async(req, res) => {
   res.json({
     code: SUCCESS_CODE,
     message: '上传成功',
-    item
+    resource
   })
 }
 
