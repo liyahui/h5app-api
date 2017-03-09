@@ -1,12 +1,14 @@
+import * as data from '../controllers/data'
 import * as user from '../controllers/user'
 import * as resource from '../controllers/resource'
 import * as project from '../controllers/project'
 
 export default app => {
-  app.use(user.auth)
-  
+  app.get('/data/:id.json', data.index)
+
   app.post('/user/login', user.login)
   app.post('/user/register', user.register)
+  app.use(user.auth)
   app.get('/user/current', user.current)
 
   app.get('/projects', project.list)

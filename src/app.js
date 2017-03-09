@@ -13,7 +13,6 @@ app.all('*', (req, res, next) => {
 })
 
 app.use(bodyParser.json({limit: '1mb'}))
-app.use(express.static(path.join(__dirname, '../public')))
 
 routes(app)
 
