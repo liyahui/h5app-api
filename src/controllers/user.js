@@ -1,7 +1,7 @@
 import models from '../models'
 import md5 from 'md5'
 import jwt from 'jsonwebtoken'
-import { SUCCESS_CODE, ERROR_CODE, JWT_SECRET, PASS_ROUTES } from '../utils'
+import { SUCCESS_CODE, ERROR_CODE, JWT_SECRET } from '../utils'
 import { MESSAGE, acessToken } from '../utils/user'
 
 /**
@@ -21,7 +21,7 @@ export const auth = (req, res, next) => {
     }
   }
 
-  req.uid || PASS_ROUTES.includes(req.path) ? next() : res.json({
+  req.uid ? next() : res.json({
     code: ERROR_CODE,
     message: '未登录'
   })

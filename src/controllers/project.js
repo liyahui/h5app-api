@@ -36,7 +36,7 @@ export const list = async(req, res) => {
     }
   }
 
-  if (req.query.user && req.uid) {
+  if (req.uid) {
     where = {
       uid: req.uid
     }

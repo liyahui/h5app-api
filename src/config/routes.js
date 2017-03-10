@@ -8,10 +8,14 @@ export default app => {
 
   app.post('/user/login', user.login)
   app.post('/user/register', user.register)
+
+  app.get('/projects/show', project.list)
+
   app.use(user.auth)
+
   app.get('/user/current', user.current)
 
-  app.get('/projects', project.list)
+  app.get('/projects/user', project.list)
   app.get('/projects/:id', project.item)
   app.post('/projects', project.create)
   app.put('/projects/:id', project.isOwn, project.update)
