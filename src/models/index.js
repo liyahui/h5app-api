@@ -3,7 +3,18 @@ import path from 'path'
 import config from '../config/db'
 import Sequelize from 'sequelize'
 
-const sequelize = new Sequelize(config)
+const options = config[process.env.NODE_ENV || 'production']
+
+options.define = {
+  underscored: true,
+  underscoredAll: true,
+  timestamps: true,
+  paranoid: true
+}
+
+options.logging = () => {}
+
+const sequelize = new Sequelize(options)
 
 const db = {}
 
@@ -13,12 +24,6 @@ fs.readdirSync(__dirname).filter(file => {
   let model = sequelize.import(path.join(__dirname, file))
   db[model.name] = model
 })
-
-const sync = async() => {
-  await sequelize.sync()
-}
-
-sync()
 
 db.sequelize = sequelize
 db.Sequelize = Sequelize
