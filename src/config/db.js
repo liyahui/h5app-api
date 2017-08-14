@@ -1,9 +1,9 @@
 export default {
   development: {
-    username: 'root',
-    password: 'root',
+    username: 'h5app',
+    password: 'h5app',
     database: 'h5app',
-    host: 'localhost',
+    host: 'liyahui.cn',
     dialect: 'mysql'
   },
   production: {

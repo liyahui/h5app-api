@@ -1,0 +1,5 @@
+src
+data/*.json
+.editorconfig
+.babelrc
+nodemon.json
