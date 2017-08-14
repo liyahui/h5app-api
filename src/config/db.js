@@ -7,8 +7,8 @@ export default {
     dialect: 'mysql'
   },
   production: {
-    username: 'liyahui',
-    password: 'huihong1224',
+    username: 'h5app',
+    password: 'h5app',
     database: 'h5app',
     host: 'liyahui.cn',
     dialect: 'mysql'
