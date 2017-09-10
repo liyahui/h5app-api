@@ -3,3 +3,4 @@ data/*.json
 .editorconfig
 .babelrc
 nodemon.json
+sql
